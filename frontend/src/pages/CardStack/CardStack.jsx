@@ -1,6 +1,11 @@
-import "./CardStack.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "./CardStack.css";
 
 const dataStructures = [
   {
@@ -40,13 +45,12 @@ const dataStructures = [
   },
   {
     name: "Union Find",
-    description:
-      "Data structure to track a partition of a set into disjoint subsets.",
+    description: "Track a partition of a set into disjoint subsets.",
   },
   {
     name: "Dynamic Programming (DP)",
     description:
-      "Method for solving problems by breaking them down into simpler subproblems and storing their solutions.",
+      "Solve problems by breaking them into simpler subproblems and storing solutions.",
   },
   {
     name: "Matrix-Based DP",
@@ -55,13 +59,11 @@ const dataStructures = [
   },
   {
     name: "Advanced DP",
-    description:
-      "Advanced dynamic programming techniques involving optimization problems like knapsack, coin change, etc.",
+    description: "Optimization problems like knapsack, coin change, etc.",
   },
   {
     name: "Advanced Topics",
-    description:
-      "Specialized algorithms and techniques for solving complex computational problems.",
+    description: "Specialized algorithms for complex computational problems.",
   },
 ];
 
@@ -74,25 +76,31 @@ const CardStack = () => {
 
   return (
     <div className="card-container">
-      <span className="text-3xl font-bold">Data Structures Challenges</span>
-      <br />
-      <span className="text-base font-extralight">
-        Organize, track, and review the problems i have solved using Data
+      <h1 className="text-4xl font-bold">Data Structures Challenges</h1>
+      <p className="text-xl font-extralight">
+        Organize, track, and review the problems I have solved using Data
         Structures.
-      </span>
-      <div className="card-stack-container">
-        {/* Updated this class */}
+      </p>
+      <Swiper
+        modules={[Navigation, Pagination]}
+        direction="horizontal"
+        slidesPerView={"3"}
+        centeredSlides={true}
+        spaceBetween={20}
+        navigation
+        pagination={{ clickable: true }}
+        className="card-swiper"
+        effect="fade"
+      >
         {dataStructures.map((ds) => (
-          <div
-            key={ds.name}
-            className="card"
-            onClick={() => handleCardClick(ds)}
-          >
-            <span className="text-2xl">{ds.name}</span>
-            <span className="text-base">{ds.description}</span>
-          </div>
+          <SwiperSlide key={ds.name}>
+            <div className="card" onClick={() => handleCardClick(ds)}>
+              <h2 className="text-2xl">{ds.name}</h2>
+              <p className="text-base">{ds.description}</p>
+            </div>
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </div>
   );
 };

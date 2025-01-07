@@ -1,22 +1,34 @@
 import "./Table.css";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 const Table = ({ dataStructure }) => {
   const [tableData, setTableData] = useState([]);
+
   useEffect(() => {
-    let apiCall = async () => {
-      let response = await axios.get("http://localhost:8000/api/problems");
-      setTableData(response.data);
+    const apiCall = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/problems/${dataStructure.name}`
+        );
+        setTableData(response.data);
+      } catch (error) {
+        console.error("Error fetching problems:", error);
+      }
     };
     apiCall();
   }, []);
 
+  // Filter data based on the selected data structure
+  const filteredData = tableData.filter(
+    (row) => row.datastructure === dataStructure.name
+  );
+
   return (
     <div className="table-container">
-      <h3>{dataStructure.name} Operations</h3>
-      {tableData.length > 0 ? (
+      <h3>{dataStructure.name} DB</h3>
+      {filteredData.length > 0 ? (
         <table className="data-table">
           <thead>
             <tr>
@@ -27,13 +39,13 @@ const Table = ({ dataStructure }) => {
             </tr>
           </thead>
           <tbody>
-            {tableData.map(
+            {filteredData.map(
               (row) => (
                 console.log(row),
                 (
                   <tr key={row.id}>
                     <td>{row.problem_name}</td>
-                    <td>{row.level}</td>
+                    <td>{row.datastructure_level}</td>
                     <td>
                       <a
                         href={row.leetcode_link}
@@ -55,7 +67,7 @@ const Table = ({ dataStructure }) => {
           </tbody>
         </table>
       ) : (
-        <p>Loading Problems ...</p>
+        <p>No problems found for {dataStructure.name}.</p>
       )}
     </div>
   );

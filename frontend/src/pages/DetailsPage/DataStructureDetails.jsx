@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./DataStructureDetails.css";
-import Table from "../components/Table";
+import Table from "../../components/Table/Table";
 import { useNavigate, useParams } from "react-router-dom";
 
 const dataStructures = [
@@ -97,33 +97,12 @@ const DataStructureDetails = () => {
           <p>Please switch to desktop mode for the best experience.</p>
         </div>
       )}
-      <div className="flex justify-end">
-        <button
-          className="flex flex-row items-center px-4 py-2 bg-custom-brown text-white font-semibold rounded-full hover:bg-custom-orange focus:outline-none"
-          onClick={() => navigate("/")}
-        >
-          Back Home
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="ml-2 h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M5 12h14m0 0l-7 7m7-7l-7-7"
-            />
-          </svg>
-        </button>
-      </div>
       <div className="details-container">
-        <span className="text-3xl">{dataStructure.name}</span>
-        <br />
-        <span className="text-xl">{dataStructure.description}</span>
-        <br />
+        <div className="text-center">
+          <span className="text-3xl">{dataStructure.name}</span>
+          <br />
+          <span className="text-xl">{dataStructure.description}</span>
+        </div>
         <Table dataStructure={dataStructure} />
       </div>
     </>

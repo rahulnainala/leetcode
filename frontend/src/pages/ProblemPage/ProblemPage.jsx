@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 const ProblemPage = () => {
   const { problemName } = useParams();
+  console.log(problemName);
   return (
     <div>
       <span>{problemName}</span>
