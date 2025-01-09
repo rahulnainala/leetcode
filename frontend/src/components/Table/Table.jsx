@@ -12,6 +12,7 @@ const Table = ({ dataStructure }) => {
         const response = await axios.get(
           `http://localhost:8000/api/problems/${dataStructure.name}`
         );
+        console.log(response);
         setTableData(response.data);
       } catch (error) {
         console.error("Error fetching problems:", error);
@@ -20,7 +21,6 @@ const Table = ({ dataStructure }) => {
     apiCall();
   }, []);
 
-  // Filter data based on the selected data structure
   const filteredData = tableData.filter(
     (row) => row.datastructure === dataStructure.name
   );

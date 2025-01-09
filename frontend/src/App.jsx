@@ -2,14 +2,23 @@ import "./App.css";
 import Layout from "./components/Layout/Layout";
 import CardStack from "./pages/CardStack/CardStack";
 import ProblemPage from "./pages/ProblemPage/ProblemPage";
-import UserPage from "./pages/userData/userPage";
+import AddData from "./pages/AddData/AddData";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DataStructureDetails from "./pages/DetailsPage/DataStructureDetails";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import { useState } from "react";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("authToken") !== null
+  );
+
   return (
     <Router>
-      <Layout>
+      <Layout
+        isAuthenticated={isAuthenticated}
+        setIsAuthenticated={setIsAuthenticated}
+      >
         <Routes>
           <Route path="/" element={<CardStack />} />
           <Route
@@ -17,7 +26,20 @@ function App() {
             element={<DataStructureDetails />}
           />
           <Route path="/problem/:problemName" element={<ProblemPage />} />
-          <Route path="/user-profile" element={<UserPage />} />
+          <Route
+            path="/login"
+            element={<LoginPage setIsAuthenticated={setIsAuthenticated} />}
+          />
+          <Route
+            path="/adddata"
+            element={
+              isAuthenticated ? (
+                <AddData />
+              ) : (
+                <LoginPage setIsAuthenticated={setIsAuthenticated} />
+              )
+            }
+          />
         </Routes>
       </Layout>
     </Router>
