@@ -2,6 +2,3 @@
   base = "/backend"
   publish = "/backend"
   command = "npm install"  # or whatever your build command is
-
-[[plugins]]
-  package = "@netlify/plugin-functions-core"
