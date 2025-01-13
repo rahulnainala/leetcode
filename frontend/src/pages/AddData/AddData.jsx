@@ -1,5 +1,5 @@
 import "./AddData.css";
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
 import { useForm } from "react-hook-form";
@@ -13,29 +13,46 @@ const AddData = () => {
     reset,
   } = useForm();
 
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+
   const onSubmit = async (data) => {
     try {
-      console.log(data);
-      const response = await axios.post("post url here", data);
+      const response = await axios.post("http://localhost:8000/addData", data);
       if (response.status === 201) {
-        <Alert variant="filled" severity="success" onClose={() => {}}>
-          <AlertTitle>Success</AlertTitle>
-          Problem Added Successfully
-        </Alert>;
-        reset();
+        setAlertMessage("Problem Added Successfully");
+        setAlertSeverity("success");
+        setTimeout(() => {
+          setAlertMessage(null);
+          reset();
+        }, 3000);
       }
     } catch (err) {
-      console.error("Error adding problem:", err);
-      <Alert variant="filled" severity="error" onClose={() => {}}>
-        <AlertTitle>Error</AlertTitle>
-        Failed to Add the Problem
-      </Alert>;
+      setAlertMessage("Failed to Add the Problem");
+      setAlertSeverity("error");
+      console.error("error faced while appending data to db", err);
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 3000);
     }
   };
 
   return (
     <div className="form-container">
       <h2 className="text-3xl text-center mb-5">Add a Problem</h2>
+
+      {alertMessage && (
+        <Alert
+          variant="filled"
+          severity={alertSeverity}
+          onClose={() => setAlertMessage(null)}
+        >
+          <AlertTitle>
+            {alertSeverity === "success" ? "Success" : "Error"}
+          </AlertTitle>
+          {alertMessage}
+        </Alert>
+      )}
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
           <label>

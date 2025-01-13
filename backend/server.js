@@ -53,6 +53,40 @@ app.get("/api/problems/:dataStructure", async (req, res) => {
   }
 });
 
+app.post("/addData", async (req, res) => {
+  const {
+    code,
+    code_description,
+    dataStructure,
+    dataStructure_level,
+    leetcode_link,
+    problem_name,
+  } = req.body;
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO problems (problem_name, leetcode_link, dataStructure_level, dataStructure, code_description, code)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [
+        problem_name,
+        leetcode_link,
+        dataStructure_level,
+        dataStructure,
+        code_description,
+        code,
+      ]
+    );
+
+    res.status(201).json({
+      message: "Data successfully appended to the database",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error faced during appending of data to DB", error);
+    res.status(500).json({ error: "Failed to append data to database" });
+  }
+});
+
 app.post("/login", (req, res) => {
   console.log("login request", req.body);
   const { user, password } = req.body;
