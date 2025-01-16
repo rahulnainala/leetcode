@@ -1,8 +1,8 @@
-const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
-const bodyParser = require("body-parser");
+const express = require("express");
 const jwt = require("jsonwebtoken");
+const bodyParser = require("body-parser");
 
 require("dotenv").config();
 
@@ -38,6 +38,23 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const generateToken = (user) => {
   return jwt.sign({ user }, JWT_SECRET, { expiresIn: "1h" });
 };
+
+app.get("/api/problem/:problemName", async (req, res) => {
+  const { problemName } = req.params;
+  try {
+    const result = await pool.query(
+      "SELECT * FROM problems WHERE problem_name = $1",
+      [problemName]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Problem not found" });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error fetching problem by name:", err);
+    res.status(500).json({ error: "Failed to fetch problem details" });
+  }
+});
 
 app.get("/api/problems/:dataStructure", async (req, res) => {
   const { dataStructure } = req.params;

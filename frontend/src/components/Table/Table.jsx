@@ -2,6 +2,7 @@ import "./Table.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import LanguageIcon from "@mui/icons-material/Language";
 
 const Table = ({ dataStructure }) => {
   const [tableData, setTableData] = useState([]);
@@ -12,7 +13,6 @@ const Table = ({ dataStructure }) => {
         const response = await axios.get(
           `http://localhost:8000/api/problems/${dataStructure.name}`
         );
-        console.log(response);
         setTableData(response.data);
       } catch (error) {
         console.error("Error fetching problems:", error);
@@ -39,31 +39,28 @@ const Table = ({ dataStructure }) => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map(
-              (row) => (
-                console.log(row),
-                (
-                  <tr key={row.id}>
-                    <td>{row.problem_name}</td>
-                    <td>{row.datastructure_level}</td>
-                    <td>
-                      <a
-                        href={row.leetcode_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Go to Problem
-                      </a>
-                    </td>
-                    <td>
-                      <Link to={`/problem/${row.problem_name}`}>
-                        <button>Go to Problem Page</button>
-                      </Link>
-                    </td>
-                  </tr>
-                )
-              )
-            )}
+            {filteredData.map((row) => (
+              <tr key={row.id}>
+                <td>{row.problem_name}</td>
+                <td>{row.datastructure_level}</td>
+                <td>
+                  <a
+                    href={row.leetcode_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex justify-center items-center"
+                  >
+                    <LanguageIcon className="mr-2" />
+                    Page Link
+                  </a>
+                </td>
+                <td>
+                  <Link to={`/problem/${row.problem_name}`}>
+                    <button>Go to Problem Page</button>
+                  </Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       ) : (
